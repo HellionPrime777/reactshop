@@ -1,0 +1,22 @@
+
+.navbarMain {
+    background-color: #1abc9c;
+    color: white;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); 
+
+  }
+  
+
+  .aMain {
+
+    transition: background-color 0.3s, box-shadow 0.3s; 
+    font-size: 20px;
+    margin-right: 20px;
+  }
+  
+
+  .aMain:hover {
+    color: white;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+    border-radius: 5px;
+  }

@@ -1,0 +1,31 @@
+.about-container{
+    box-shadow: 0 6px 12px rgba(26, 188, 156, 0.4);
+}
+.team-member-card {
+    background-color: #fff;
+    border: 1px solid #1abc9c;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    padding: 20px;
+    text-align: center;
+    transition: box-shadow 0.3s;
+  }
+  
+  .team-member-card img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border: 2px solid #1abc9c;
+    border-radius: 50%;
+    transition: transform 0.3s, border 0.3s;
+  }
+  
+  .team-member-card:hover {
+    box-shadow: 0 6px 12px rgba(26, 188, 156, 0.4);
+  }
+  
+  .team-member-card img:hover {
+    transform: scale(1.1);
+    border: 2px solid #1abc9c;
+  }
+  
