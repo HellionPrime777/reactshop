@@ -17,6 +17,7 @@ function Menu() {
       <Nav.Link className='aMain' as={Link} to="/contact">Контакти</Nav.Link>
       <Nav.Link className='aMain' as={Link} to="/about">Про нас</Nav.Link>
       <Nav.Link className='aMain' as={Link} to="/DeliveryPayment">Доставка і оплата</Nav.Link>
+      <Nav.Link className='aMain' as={Link} to="/Admin">Admin Panel</Nav.Link>
       
 
     </Nav>

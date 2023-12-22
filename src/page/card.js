@@ -1,81 +1,106 @@
 import Layout from "../component/layout/layout";
-import React from 'react';
-// import { useParams } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
 import '../css/owl.carousel.css';
 import '../css/responsive.css';
 import '../css/style.css';
-import images from './images';
-// import products from './cartProduct'
+import { Link } from 'react-router-dom';
 
 
 
 
 function Card() {
 
-    // const { id } = useParams();
-    // const product = products.find((p) => p.id === Number(id));
-  
-    // if (!product) {
-    //   return <div>Такого продукту не знайдено</div>;
-    // }
+  const [products, setProducts] = useState([]);
+  const [selectedProductId, setSelectedProductId] = useState(null);
+
+
+    useEffect(() => {
+      // Викликаємо API для отримання даних з сервера
+      fetch('http://localhost:8000/api/product')
+          .then(res => res.json())
+          .then(json => setProducts(json));
+  }, []);
+
+  const handleProductClick = (productId) => {
+      // Обробник кліку по продукту
+      // Встановлюємо ідентифікатор вибраного продукту
+      setSelectedProductId(productId);
+  };
 
   return (
     <Layout>
 
-{/* <div className="single-product-area">
+<div className="single-product-area">
+                {/* Решта вашого коду */}
+                {/* ... */}
 
-        <h2>{product.name}</h2>
-        <p>Ціна: ${product.price}</p>
-        <p>Знижена ціна: ${product.discountedPrice}</p>
-        <img src={product.image} alt={product.name} />
+                <div className="col-md-8">
+                    <div className="product-content-right">
+                        {/* Решта вашого коду */}
+                        {/* ... */}
 
-      </div> */}
+                        <div className="row">
+                            <div className="col-sm-6">
+                                <div className="product-images">
+                                    {/* Використовуємо лише вибраний продукт за його id */}
+                                    {products
+                                        .filter(product => product.id === selectedProductId)
+                                        .map((product) => (
+                                            <div key={product.id}>
+                                                {/* Основне зображення */}
+                                                <div className="product-main-img">
+                                                    <img src={`/images/${product.image}`} alt={product.name} />
+                                                </div>
 
+                                                {/* Галерея зображень */}
+                                                <div className="product-gallery">
+                                                    {[1, 2, 3, 4, 5].map((index) => (
+                                                        <img key={index} src={`/images/${product.image}`} alt={product.name} />
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        ))}
+                                </div>
+                            </div>
+                            {/* Решта вашого коду */}
+                            {/* ... */}
+                        </div>
 
-      <div className="single-product-area">
+                    </div>
+                </div>
+            </div>
+
+<div className="single-product-area">
         <div className="zigzag-bottom"></div>
         <div className="container">
-            <div className="row">
-                <div className="col-md-4">
-                    <div className="single-sidebar">
-                        <h2 className="sidebar-title">Search Products</h2>
-                        <form action="">
-                            <input type="text" placeholder="Search products..."></input>
-                            <input type="submit" value="Search"></input>
-                        </form>
+          <div className="row">
+            <div className="col-md-4">
+              <div className="single-sidebar">
+                <h2 className="sidebar-title">Search Products</h2>
+                <form action="">
+                  <input type="text" placeholder="Search products..."></input>
+                  <input type="submit" value="Search"></input>
+                </form>
+              </div>
+
+
+
+
+
+
+              <div className="single-sidebar">
+                <h2 className="sidebar-title">Products</h2>
+                {products.map((product) => (
+                  <div className="thubmnail-recent" key={product.id}>
+                    <img src={`/images/${product.image}`} className="recent-thumb" alt={product.name}></img>
+                    <h2><a href="/card">{product.name}</a></h2>
+                    <div className="product-sidebar-price">
+                      <ins>${product.price}</ins> <del>${product.discounted_price}</del>
                     </div>
-                    
-                    <div className="single-sidebar">
-                        <h2 className="sidebar-title">Products</h2>
-                        <div className="thubmnail-recent">
-                            <img src={images['21.webp']} className="recent-thumb" alt=""></img>
-                            <h2><a href="/card">Apple - 2023</a></h2>
-                            <div className="product-sidebar-price">
-                                <ins>$1000.00</ins> <del>$800.00</del>
-                            </div>                             
-                        </div>
-                        <div className="thubmnail-recent">
-                            <img src={images['1.webp']} className="recent-thumb" alt=""></img>
-                            <h2><a href="/card">Sumsung - 2022</a></h2>
-                            <div className="product-sidebar-price">
-                                <ins>$1100.00</ins> <del>$800.00</del>
-                            </div>                             
-                        </div>
-                        <div className="thubmnail-recent">
-                            <img src={images['31.webp']} className="recent-thumb" alt=""></img>
-                            <h2><a href="/card">ZTE - 2023</a></h2>
-                            <div className="product-sidebar-price">
-                                <ins>$700.00</ins> <del>$800.00</del>
-                            </div>                             
-                        </div>
-                        <div className="thubmnail-recent">
-                            <img src={images['41.webp']} className="recent-thumb" alt=""></img>
-                            <h2><a href="/card">Huawey - 2022</a></h2>
-                            <div className="product-sidebar-price">
-                                <ins>$700.00</ins> <del>$800.00</del>
-                            </div>                             
-                        </div>
-                    </div>
+                   
+                  </div>
+                ))}
+              </div>
                     
                     <div className="single-sidebar">
                         <h2 className="sidebar-title">Recent Posts</h2>
@@ -98,20 +123,25 @@ function Card() {
                         </div>
                         
                         <div className="row">
-                            <div className="col-sm-6">
-                                <div className="product-images">
-                                    <div className="product-main-img">
-                                        <img src={images['1.webp']} alt=""></img>
-                                    </div>
-                                    
-                                    <div className="product-gallery">
-                                        <img src={images['2.webp']} alt=""></img>
-                                        <img src={images['3.webp']} alt=""></img>
-                                        <img src={images['4.webp']} alt=""></img>
-                                        <img src={images['5.webp']} alt=""></img>
-                                    </div>
-                                </div>
-                            </div>
+          <div className="col-sm-6">
+            <div className="product-images">
+              {products.map((product) => (
+                <div key={product.id}>
+                  {/* Основне зображення */}
+                  <div className="product-main-img">
+                    <img src={`/images/${product.image}`} alt={product.name} />
+                  </div>
+
+                  {/* Галерея зображень */}
+                  <div className="product-gallery">
+                    {[1, 2, 3, 4, 5].map((index) => (
+                      <img key={index} src={`/images/${product.image}`} alt={product.name} />
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
                             
                             <div className="col-sm-6">
                                 <div className="product-inner">
@@ -177,7 +207,7 @@ function Card() {
                             <div className="related-products-carousel">
                                 <div className="single-product">
                                     <div className="product-f-image">
-                                        <img src={images['41.webp']} alt=""></img>
+                                        {/* <img src={images['41.webp']} alt=""></img> */}
                                         <div className="product-hover">
                                             <a href="/card" className="add-to-cart-link"><i className="fa fa-shopping-cart"></i> Add to cart</a>
                                             <a href="/card" className="view-details-link"><i className="fa fa-link"></i> See details</a>
@@ -192,7 +222,7 @@ function Card() {
                                 </div>
                                 <div className="single-product">
                                     <div className="product-f-image">
-                                        <img src={images['51.webp']} alt=""></img>
+                                        {/* <img src={images['51.webp']} alt=""></img> */}
                                         <div className="product-hover">
                                             <a href="/card" className="add-to-cart-link"><i className="fa fa-shopping-cart"></i> Add to cart</a>
                                             <a href="/card" className="view-details-link"><i className="fa fa-link"></i> See details</a>

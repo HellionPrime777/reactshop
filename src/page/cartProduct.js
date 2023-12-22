@@ -1,170 +1,109 @@
-import Layout from "../component/layout/layout";
 import { Link } from "react-router-dom";
-import images from './images';
+import Layout from "../component/layout/layout";
+import { useNavigate } from "react-router-dom";
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
-import { Swiper, SwiperSlide } from 'swiper/react'
-import React from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import React, { useState, useEffect } from 'react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 
-let products = [
-  {
-    id: 1,
-    name: 'Apple ',
-    price: 899.00,
-    discountedPrice: 999.00,
-    image: images['1.webp'],
-  },
-  {
-    id: 2,
-    name: 'Sumsung',
-    price: 799.00,
-    discountedPrice: 899.00,
-    image: images['21.webp'],
-  },
-  {
-    id: 3,
-    name: 'Motorola',
-    price: 699.00,
-    discountedPrice: 799.00,
-    image: images['31.webp'],
-  },
-  {
-    id: 3,
-    name: 'ZTE',
-    price: 699.00,
-    discountedPrice: 799.00,
-    image: images['41.webp'],
-  },
-  {
-    id: 1,
-    name: 'Huawei',
-    price: 899.00,
-    discountedPrice: 999.00,
-    image: images['51.webp'],
-  },
-  {
-    id: 2,
-    name: 'Xiomi',
-    price: 799.00,
-    discountedPrice: 899.00,
-    image: images['74.webp'],
-  },
-  {
-    id: 3,
-    name: 'BlackBery',
-    price: 699.00,
-    discountedPrice: 799.00,
-    image: images['71.webp'],
-  },
-  {
-    id: 3,
-    name: 'Nokia',
-    price: 699.00,
-    discountedPrice: 799.00,
-    image: images['3.webp'],
-  },
-  // Додайте інші продукти сюди
-];
-
 const imageStyle = {
-  width: '200px',  
-  height: '350px', 
+  width: '200px',
+  height: '350px',
   border: '2px',
-  
 };
-const swiperContainer = {
-  display: "flex",
-justifyContent: "center",
-alignItems: "center",
-}
 
 function ProductCard({ product }) {
+  const navigate = useNavigate();
+
+  const addToCart = () => {
+    // Тут ви можете додати логіку для створення ордера та відправки на сервер
+    // Наприклад, відправити POST-запит на endpoint для створення ордера
+    fetch('http://localhost:8000/api/order', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: product.name,
+        price: product.price,
+      }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Order created:', data);
+      // Перенаправлення на сторінку корзини після успішного створення ордера
+      navigate('/cart');
+    })
+    .catch(error => {
+      console.error('Error creating order:', error);
+    });
+  };
+
   return (
-    <div className="col-md-3 col-sm-6">
-      <div className="single-shop-product">
-        <div className="product-upper">
-          <img src={product.image} alt={product.name} />
-        </div>
-        <h2>
-          <Link to={`/product/${product.id}`}>{product.name}</Link>
-        </h2>
-        <div className="product-carousel-price">
-          <ins>${product.price}</ins> <del>${product.discountedPrice}</del>
-        </div>
-        <div className="product-option-shop">
-          <Link to={`/product/${product.id}`} className="add_to_cart_button">
-            Add to cart
-          </Link>
+
+      <div className="col-md-3 col-sm-6">
+        <div className="single-shop-product">
+          <div className="product-upper">
+            <img src={`/images/${product.image}`} alt={product.name} style={imageStyle} />
+          </div>
+          <h2>
+            <Link to={`/product/${product.id}`}>{product.name}</Link>
+          </h2>
+          <div className="product-carousel-price">
+            <ins>${product.price}</ins> <del>${product.discountedPrice}</del>
+          </div>
+          <div className="product-option-shop">
+            {/* Замініть a на onClick */}
+            <button className="add_to_cart_button" onClick={addToCart}>
+              Add to cart
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
 }
 
-
 function CartProduct() {
+  const [products, setProducts] = useState([]);
 
+  useEffect(() => {
+    // Fetch data from the server
+    fetch('http://localhost:8000/api/product')
+      .then(res => res.json())
+      .then(json => setProducts(json));
+  }, []);
 
   return (
     <Layout>
-       <Swiper 
-         modules={[Navigation, Pagination, Scrollbar, A11y]}
-         spaceBetween={0}
-         slidesPerView={1}
-         centeredSlides={true}
-         navigation={{ clickable: true }}
-         pagination={{ clickable: true }}
-         scrollbar={{ draggable: true }}
-          onSlideChange={() => console.log('slide change')}
-          onSwiper={(swiper) => console.log(swiper)}
-        >
-          <SwiperSlide style={swiperContainer}>
+      <Swiper
+        modules={[Navigation, Pagination, Scrollbar, A11y]}
+        spaceBetween={0}
+        slidesPerView={3}
+        centeredSlides={true}
+        navigation={{ clickable: true }}
+        pagination={{ clickable: true }}
+        scrollbar={{ draggable: true }}
+      >
+        {products.map((product) => (
+          <SwiperSlide key={product.id}>
             <img
-               src={images['21.webp']}
-              alt="Slide 1"
-              style={imageStyle}
-            />
-          </SwiperSlide >
-          <SwiperSlide style={swiperContainer}>
-            <img
-              src={images['1.webp']}
-              alt="Slide 2"
-              style={imageStyle}
-            />
-          </SwiperSlide >
-          <SwiperSlide style={swiperContainer}>
-            <img
-               src={images['31.webp']}
-              alt="Slide 3"
+              src={`/images/${product.image}`}
+              alt={product.name}
               style={imageStyle}
             />
           </SwiperSlide>
-          <SwiperSlide style={swiperContainer}>
-            <img
-               src={images['41.webp']}
-              alt="Slide 4"
-              style={imageStyle}
-            />
-          </SwiperSlide>
-          <SwiperSlide style={swiperContainer}>
-            <img
-               src={images['51.webp']}
-              alt="Slide 4"
-              style={imageStyle}
-            />
-          </SwiperSlide>
-          
-        </Swiper>
+        ))}
+      </Swiper>
 
-      <div class="single-product-area">
-        <div class="zigzag-bottom"></div>
-        <div class="container">
-          <div class="row">
+      <div className="single-product-area">
+        <div className="zigzag-bottom"></div>
+        <div className="container">
+          <div className="row">
             {products.map((product) => (
-              <ProductCard product={product} />
+              <ProductCard key={product.id} product={product} />
             ))}
           </div>
         </div>

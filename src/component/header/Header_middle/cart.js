@@ -1,12 +1,12 @@
 import React from 'react';
 import { CartFill } from 'react-bootstrap-icons';
 import Style from './search.module.css';
-
+import { Link } from 'react-router-dom';
 function Cart() {
   return (
-    <a href="/cart" className={`btn btn-primary ${Style.buttonCart}`}>
+    <Link to="/cart" className={`btn btn-primary ${Style.buttonCart}`}>
       <CartFill size={20} /> До кошика
-    </a>
+    </Link>
   );
 }
 
